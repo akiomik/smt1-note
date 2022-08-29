@@ -13,23 +13,37 @@ case class Square(value: Int) {
   val flags = value >> 8
   val event = value & 0xFF
 
-  def hasTopDoor    = (flags & 0x80) == 0x80
-  def hasTopWall    = (flags & 0x40) == 0x40
-  def hasRightDoor  = (flags & 0x20) == 0x20
-  def hasRightWall  = (flags & 0x10) == 0x10
-  def hasBottomDoor = (flags & 0x08) == 0x08
-  def hasBottomWall = (flags & 0x04) == 0x04
-  def hasLeftDoor   = (flags & 0x02) == 0x02
-  def hasLeftWall   = (flags & 0x01) == 0x01
+  def hasNorthDoor     = (flags & 0x80) == 0x80
+  def hasNorthWall     = (flags & 0x40) == 0x40
+  def hasNorthFakeWall = hasNorthDoor && !hasNorthWall
+  def hasEastDoor      = (flags & 0x20) == 0x20
+  def hasEastWall      = (flags & 0x10) == 0x10
+  def hasEastFakeWall  = hasEastDoor && !hasEastWall
+  def hasSouthDoor     = (flags & 0x08) == 0x08
+  def hasSouthWall     = (flags & 0x04) == 0x04
+  def hasSouthFakeWall = hasSouthDoor && !hasSouthWall
+  def hasWestDoor      = (flags & 0x02) == 0x02
+  def hasWestWall      = (flags & 0x01) == 0x01
+  def hasWestFakeWall  = hasWestDoor && !hasWestWall
 
-  def isExit       = event == 0x07
-  def isUpstairs   = event == 0x08
-  def isDownstairs = event == 0x09
-  def isTalk       = event == 0x0B
-  def isElevator   = event == 0x0C
-  def isEvent      = event == 0x0E
-  def isUndefined  = event == 0x30
-  def isItem       = event == 0x40
+  def isRotatingFloor = (event & 0x0F) == 0x01
+  def isPoisonFloor   = (event & 0x0F) == 0x02
+  def isDamageFloorLN = (event & 0x0F) == 0x03
+  def isDamageFloorNC = (event & 0x0F) == 0x04
+  def isChute         = (event & 0x0F) == 0x05
+  def isTeleport      = (event & 0x0F) == 0x06
+  def isExit          = (event & 0x0F) == 0x07
+  def isUpStairs      = (event & 0x0F) == 0x08
+  def isDownStairs    = (event & 0x0F) == 0x09
+  def hasSign         = (event & 0x0F) == 0x0A
+  def hasMessage      = (event & 0x0F) == 0x0B
+  def isElevator      = (event & 0x0F) == 0x0C
+  def isEvent1        = (event & 0x0F) == 0x0D
+  def isEvent2        = (event & 0x0F) == 0x0E
+  def isUnknown       = (event & 0x0F) == 0x0F
+  def isInaccessible  = (event & 0x30) == 0x30
+  def hasChest        = (event & 0x40) == 0x40
+  def isDarkness      = (event & 0x80) == 0x80
 }
 
 object Square {
@@ -100,9 +114,20 @@ def createLeftDoorImage(width: Double, height: Double, offset: Double, door: Dou
   ))
 }
 
+def createCircleSymbolImage(size: Double, scale: Double = 0.4, borderColor: Color = Color.black, fillColor: Color = Color.white): Image = {
+  Image.circle(size * scale).strokeColor(borderColor).fillColor(fillColor)
+}
+
 def createSquareImage(square: Square, width: Double = 10, height: Double = 10, offset: Double = 0, door: Double = 4): Image = {
-  val bgColor = if (square.isUndefined) { Color.black } else { Color.white }
+  val bgColor =
+    if (square.isDarkness) { Color.gray }
+    else if (square.isPoisonFloor) { Color.purple }
+    else if (square.isDamageFloorNC) { Color.blue }
+    else if (square.isDamageFloorLN) { Color.red }
+    else if (square.isInaccessible) { Color.black }
+    else { Color.white }
   val fgColor = Color.black
+  val fakeColor = Color.gray
   var im = Image.square(width).noStroke.fillColor(bgColor)
 
   // NOTE: 左下が原点で+xは右、+yは上
@@ -111,31 +136,35 @@ def createSquareImage(square: Square, width: Double = 10, height: Double = 10, o
   //       必ず線を描くことでimの幅が一定になるようにしている
 
   // 上
-  val top = if (square.hasTopDoor) { createTopDoorImage(width, height, offset, door) }
+  val top = if (square.hasNorthDoor) { createTopDoorImage(width, height, offset, door) }
             else { createTopWallImage(width, height, offset) }
-  val topColor = if (square.hasTopWall) { fgColor } else { bgColor }
+  val topColor = if (square.hasNorthFakeWall) { fakeColor } else if (square.hasNorthWall) { fgColor } else { bgColor }
   im = im.under(top.strokeColor(topColor).at(-width/2, -height/2))
 
   // 右
-  val right = if (square.hasRightDoor) { createRightDoorImage(width, height, offset, door) }
+  val right = if (square.hasEastDoor) { createRightDoorImage(width, height, offset, door) }
               else { createRightWall(width, height, offset) }
-  val rightColor = if (square.hasRightWall) { fgColor } else { bgColor }
+  val rightColor = if (square.hasEastFakeWall) { fakeColor } else if (square.hasEastWall) { fgColor } else { bgColor }
   im = im.under(right.strokeColor(rightColor).at(-width/2, -height/2))
 
   // 下
-  val bottom = if (square.hasBottomDoor) { createBottomDoorImage(width, height, offset, door) }
+  val bottom = if (square.hasSouthDoor) { createBottomDoorImage(width, height, offset, door) }
                else { createBottomWallImage(width, height, offset) }
-  val bottomColor = if (square.hasBottomWall) { fgColor } else { bgColor }
+  val bottomColor = if (square.hasSouthFakeWall) { fakeColor } else if (square.hasSouthWall) { fgColor } else { bgColor }
   im = im.under(bottom.strokeColor(bottomColor).at(-width/2, -height/2))
 
   // 左
-  val left = if (square.hasLeftDoor) { createLeftDoorImage(width, height, offset, door) }
+  val left = if (square.hasWestDoor) { createLeftDoorImage(width, height, offset, door) }
              else { createLeftWallImage(width, height, offset) }
-  val leftColor = if (square.hasLeftWall) { fgColor } else { bgColor }
+  val leftColor = if (square.hasWestFakeWall) { fakeColor } else if (square.hasWestWall) { fgColor } else { bgColor }
   im = im.under(left.strokeColor(leftColor).at(-width/2, -height/2))
 
   if (square.isExit) {
-    im = im.under(Image.circle(width * 0.4).strokeColor(fgColor).fillColor(Color.red))
+    im = im.under(createCircleSymbolImage(width, borderColor = fgColor, fillColor = Color.red))
+  }
+
+  if (square.isChute) {
+    im = im.under(createCircleSymbolImage(width, borderColor = fgColor, fillColor = Color.black))
   }
 
   im
