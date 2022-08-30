@@ -107,7 +107,8 @@
 
 ### マップジェネレータ
 
-[Ammonite](https://ammonite.io) が必要。また、 [dooble](https://www.creativescala.org/doodle/) の [未リリースのコミット](https://github.com/creativescala/doodle/commit/efc3371fbaf3277dcd9a90af5d49f94f115c269e) に依存しているため、事前に `publishLocal` しておく必要がある。
+[Ammonite](https://ammonite.io) が必要。また、 [doodle](https://www.creativescala.org/doodle/) の [未リリースのコミット](https://github.com/creativescala/doodle/commit/efc3371fbaf3277dcd9a90af5d49f94f115c269e) に依存しているため、事前に `publishLocal` しておく必要がある。
+
 以下のコマンドで `map.png` を生成する。
 
 ```bash
