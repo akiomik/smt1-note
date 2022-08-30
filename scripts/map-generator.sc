@@ -1,9 +1,11 @@
-import $ivy.`org.creativescala::doodle:0.10.1 compat`
+// NOTE: This is local published version of https://github.com/creativescala/doodle/commit/5b59a0733ff731a0f358e468c52eb6be0410d162
+import $ivy.`org.creativescala::doodle:0.11.2-CUSTOM compat`
 
 import scala.io.Source
 
 import cats.effect.unsafe.implicits.global
 import doodle.core._
+import doodle.core.font._
 import doodle.effect.Writer._
 import doodle.image._
 import doodle.image.syntax.all._
@@ -118,7 +120,7 @@ def createCircleSymbolImage(size: Double, scale: Double = 0.4, borderColor: Colo
   Image.circle(size * scale).strokeColor(borderColor).fillColor(fillColor)
 }
 
-def createSquareImage(square: Square, width: Double = 10, height: Double = 10, offset: Double = 0, door: Double = 4): Image = {
+def createSquareImage(square: Square, width: Double = 10, height: Double = 10, offset: Double = 0, door: Double = 4, fontSize: Int = 7): Image = {
   val bgColor =
     if (square.isDarkness) { Color.gray }
     else if (square.isPoisonFloor) { Color.purple }
@@ -128,6 +130,7 @@ def createSquareImage(square: Square, width: Double = 10, height: Double = 10, o
     else { Color.white }
   val fgColor = Color.black
   val fakeColor = Color.gray
+  val font = Font.defaultSansSerif.size(fontSize)
   var im = Image.square(width).noStroke.fillColor(bgColor)
 
   // NOTE: 左下が原点で+xは右、+yは上
@@ -159,15 +162,31 @@ def createSquareImage(square: Square, width: Double = 10, height: Double = 10, o
   val leftColor = if (square.hasWestFakeWall) { fakeColor } else if (square.hasWestWall) { fgColor } else { bgColor }
   im = im.under(left.strokeColor(leftColor).at(-width/2, -height/2))
 
-  if (square.isExit) {
-    im = im.under(createCircleSymbolImage(width, borderColor = fgColor, fillColor = Color.red))
-  }
-
   if (square.isChute) {
     im = im.under(createCircleSymbolImage(width, borderColor = fgColor, fillColor = Color.black))
   }
 
+  if (square.isExit) {
+    im = im.under(createCircleSymbolImage(width, borderColor = fgColor, fillColor = Color.red))
+  }
+
+  if (square.isUpStairs) {
+    im = im.under(Image.text("U").font(font))
+  }
+
+  if (square.isDownStairs) {
+    im = im.under(Image.text("D").font(font))
+  }
+
+  if (square.isElevator) {
+    im = im.under(Image.text("E").font(font))
+  }
+
   im
+}
+
+def createBlankSquareImage(): Image = {
+  createSquareImage(Square.fromHexString("00"))
 }
 
 def createRowImage(line: Seq[String]): Image = {
@@ -175,7 +194,42 @@ def createRowImage(line: Seq[String]): Image = {
     val square = Square.fromHexString(hex)
     acc match {
       case Some(im) => Some(im.beside(createSquareImage(square)))
-      case None => Some(createSquareImage(square))
+      case None     => Some(createSquareImage(square))
+    }
+  }.get
+}
+
+def toHexIndex(i: Int): String = {
+  val index = i.toHexString.toUpperCase
+  if (index.size == 1) {
+    s"0${index}"
+  } else {
+    index
+  }
+}
+
+def createColumnIndexImage(size: Int, fontSize: Int = 7): Image = {
+  val font = Font.defaultSansSerif.size(fontSize)
+  val bg = createBlankSquareImage
+
+  (0 until size).foldLeft(None: Option[Image]) { (acc, i) =>
+    val im = Image.text(toHexIndex(i)).font(font).on(bg)
+    acc match {
+      case Some(im0) => Some(im0.beside(im))
+      case None      => Some(im)
+    }
+  }.get
+}
+
+def createRowIndexImage(size: Int, fontSize: Int = 7): Image = {
+  val font = Font.defaultSansSerif.size(fontSize)
+  val bg = createBlankSquareImage
+
+  (0 until size).foldLeft(None: Option[Image]) { (acc, i) =>
+    val im = Image.text(toHexIndex(i)).font(font).on(bg)
+    acc match {
+      case Some(im0) => Some(im0.above(im))
+      case None      => Some(im)
     }
   }.get
 }
@@ -184,9 +238,18 @@ def createMapImage(lines: Seq[Seq[String]]): Image = {
   lines.foldLeft(None: Option[Image]) { (acc, line) =>
     acc match {
       case Some(im) => Some(im.above(createRowImage(line)))
-      case None => Some(createRowImage(line))
+      case None     => Some(createRowImage(line))
     }
   }.get
+}
+
+def createMapWithIndexImage(lines: Seq[Seq[String]]): Image = {
+  val space = createBlankSquareImage
+  val rowIndex = createRowIndexImage(lines.size)
+  val colIndex = createColumnIndexImage(lines.head.size)
+  val map = createMapImage(lines)
+
+  (space.above(rowIndex)).beside(colIndex.above(map))
 }
 
 val path = os.pwd/'data/"map.txt"
@@ -194,6 +257,6 @@ val dataFile = Source.fromFile(path.toString)
 val lines = dataFile.getLines.map(_.split(" ").toSeq).toSeq
 dataFile.close()
 
-val map = createMapImage(lines)
+val map = createMapWithIndexImage(lines)
 // map.draw()
 map.write[Png]("map.png")
