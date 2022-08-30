@@ -28,6 +28,7 @@
 ### 3Dダンジョン
 
 ![3d-map](https://github.com/akiomik/smt1-note/blob/main/map.png?raw=true)
+![3d-map-with-annotation](https://github.com/akiomik/smt1-note/blob/main/map-annotated.png?raw=true)
 
 3Dダンジョンのデータはメモリ上の `0x048000` 〜 `0x4BFFF` の範囲。
 各マスは壁データ1 byteとイベントデータ1byteの合計2 byteで表現され、以下のようなデータ構造を持っている。
