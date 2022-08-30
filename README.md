@@ -27,8 +27,12 @@
 
 ### 3Dダンジョン
 
+メモリ上の3Dダンジョンデータをマップジェネレータ ([scripts/map-generator.sc](scripts/map-generator.sc)) により画像化したもの。
+
 ![3d-map](https://github.com/akiomik/smt1-note/blob/main/map.png?raw=true)
 ![3d-map-with-annotation](https://github.com/akiomik/smt1-note/blob/main/map-annotated.png?raw=true)
+
+### 3Dダンジョンのデータ
 
 3Dダンジョンのデータはメモリ上の `0x048000` 〜 `0x4BFFF` の範囲。
 各マスは壁データ1 byteとイベントデータ1byteの合計2 byteで表現され、以下のようなデータ構造を持っている。
@@ -103,9 +107,11 @@
 
 ### マップジェネレータ
 
-[Ammonite](https://ammonite.io)が必要。以下のコマンドで `map.png` を生成する。
+[Ammonite](https://ammonite.io) が必要。また、 [dooble](https://www.creativescala.org/doodle/) の [未リリースのコミット](https://github.com/creativescala/doodle/commit/efc3371fbaf3277dcd9a90af5d49f94f115c269e) に依存しているため、事前に `publishLocal` しておく必要がある。
+以下のコマンドで `map.png` を生成する。
 
 ```bash
+# Generates map.png
 amm scripts/map-generator.sc
 ```
 
