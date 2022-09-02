@@ -4,8 +4,7 @@
 
 ## 文字
 
-名前で使える文字コード一覧。未使用の場合は `0xFF` が割り当てられる。
-その他のテキストデータとは互換性がない可能性に注意。
+文字コード一覧。未使用の場合は `0xFF` が割り当てられる。
 
 |      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  A  |  B  |  C  |  D  |  E  |  F  |
 |------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
@@ -114,6 +113,20 @@
 ```bash
 # Generates map.png
 amm scripts/map-generator.sc
+```
+
+### 文字デコーダ
+
+[Ammonite](https://ammonite.io) が必要。
+
+16進数でエンコードされた文字コードを受け取ってUTF-8にデコードした文字を出力する。
+
+```bash
+# Decodes characters from hex string
+amm scripts/char-decoder.sc --str 668AB9707F
+
+# Decodes characters from binary file
+amm scripts/char-decoder.sc --file text.bin
 ```
 
 ## リソース
