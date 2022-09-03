@@ -123,10 +123,21 @@ amm scripts/map-generator.sc
 
 ```bash
 # Decodes characters from hex string
-amm scripts/char-decoder.sc --str 668AB9707F
+amm scripts/char-decoder.sc --str 668AB9707F # => コンゴトモ
 
 # Decodes characters from binary file
 amm scripts/char-decoder.sc --file text.bin
+```
+
+### 文字エンコーダ
+
+[Ammonite](https://ammonite.io) が必要。
+
+UTF-8の文字列を受け取って、16進数でエンコードされた文字コードを出力する。
+
+```bash
+# Encodes characters to hex string
+amm scripts/char-encoder.sc --str コンゴトモ # => 668ab9707f
 ```
 
 ## リソース
