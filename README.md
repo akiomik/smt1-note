@@ -619,7 +619,7 @@
 | `0x68` | テール           | `0x0D` |        |            |
 | `0x69` | かいしん         | `0x0D` |        |            |
 
-以下はデータが一部存在するものの未使用の特技。ゲーム内では名前データが存在しない (参考: [https://tcrf.net/Shin_Megami_Tensei_(SNES)#Unused_Skills](https://tcrf.net/Shin_Megami_Tensei_(SNES)#Unused_Skills) 。
+以下はデータが一部存在するものの未使用の特技。ゲーム内では名前データが存在しない (参考: [https://tcrf.net/Shin_Megami_Tensei_(SNES)#Unused_Skills](https://tcrf.net/Shin_Megami_Tensei_(SNES)#Unused_Skills)) 。
 
 | ID     | 名前              | 属性   |
 |--------|-------------------|--------|
