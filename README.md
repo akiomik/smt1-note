@@ -1311,6 +1311,40 @@ $$
 - `0x40`: 宝箱
 - `0x80`: 暗闇 (灰色)
 
+## 乱数
+
+メモリ上の `0x009643` が乱数生成処理。単純なLFSRやLCGではない模様。
+状態を3byte (`0x070ED7` 〜 `0x070ED9`) 、生成された乱数を `0x070ED5` に1byte保持している。
+
+scalaでの再現実装は以下のようになる (以下の `d5` が新規に生成される乱数)。
+
+```scala
+type Prng = State[(Int, Int, Int, Int), Int]
+
+def prng: Prng = State(state0 => {
+  val (d50, d70, d80, d90) = state0
+
+  val p = d70 & 0x03
+  val init = p == 0x00 || p == 0x03
+
+  val state =
+    (for {
+      d9 <- rol(d90)
+      d7 <- rol(d70)
+      q  <- adc(d7, 0x22)
+      r  <- adc(q, d9)
+      d8 <- adc(r ^ 0x5A, d80)
+      d5 = d8 ^ d50
+    } yield {
+      (d5, d7, d8, d9)
+    }).runA(init).value
+
+  (state, state._1)
+})
+```
+
+完全なコードは [https://github.com/akiomik/smt1-note/blob/main/scripts/prng.sc](https://github.com/akiomik/smt1-note/blob/main/scripts/prng.sc) を参照のこと。
+
 ## スクリプト
 
 ### マップジェネレータ
