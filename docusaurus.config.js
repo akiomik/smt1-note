@@ -46,6 +46,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        gtag: {
+          trackingID: 'G-TW5L9W03GF',
+          anonymizeIP: true,
+        },
       }),
     ],
   ],
@@ -117,10 +121,6 @@ const config = {
       metadata: [
         {name: 'keywords', content: '真女神転生, smt, atlas, アトラス, 攻略'},
       ],
-      gtag: {
-        trackingID: 'G-TW5L9W03GF',
-        anonymizeIP: true,
-      },
     }),
 
     stylesheets: [
