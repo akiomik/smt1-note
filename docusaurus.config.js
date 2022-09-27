@@ -10,7 +10,7 @@ const katex = require('rehype-katex');
 const config = {
   title: '真・女神転生1 解析ノート',
   tagline: 'アトラスのRPG『真・女神転生』のSFC版に関するデータをまとめています。',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://smt1-note.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -117,6 +117,10 @@ const config = {
       metadata: [
         {name: 'keywords', content: '真女神転生, smt, atlas, アトラス, 攻略'},
       ],
+      gtag: {
+        trackingID: 'G-TW5L9W03GF',
+        anonymizeIP: true,
+      },
     }),
 
     stylesheets: [

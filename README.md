@@ -2,6 +2,8 @@
 
 真・女神転生 (Shin Megami Tensei) の日本語版SFCについてのデータをまとめています。
 
+[サイトはこちら](https://smt1-note.vercel.app/)
+
 ## ドキュメントの生成
 
 [Docusaurus 2](https://docusaurus.io/) を使って生成している。
