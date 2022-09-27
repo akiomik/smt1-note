@@ -6,7 +6,7 @@ sidebar_position: 6
 
 汎用的に使われている列挙型とフラグ。
 
-## 攻撃回数 {#number-of-hits}
+## 攻撃回数 {#number-of-attacks}
 
 攻撃回数のenum。悪魔の通常攻撃回数やスキルの効果範囲などで利用される。
 
