@@ -28,7 +28,7 @@
     "remark-math": "^3.0.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.0.0",
+    "@docusaurus/module-type-aliases": "2.4.1",
     "xo": "^0.56.0"
   },
   "browserslist": {
