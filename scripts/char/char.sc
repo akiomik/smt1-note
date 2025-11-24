@@ -209,6 +209,53 @@ val MAPPING = Map(
   0xCD -> 'ポ',
   0xCE -> 'ヴ',
   0xCF -> '　',
+  0xD0 -> 'ｆ', // フラグを立てる (OR)。2byte目の下位3bitでフラグを立てる位、上位5bitで更新するフラグのインデックスを表す
+  0xD1 -> 'ｇ', // フラグを下げる (AND)
+  0xD2 -> 'ｃ', // 分岐。フラグが立っている場合はジャンプし、立っていない場合は継続。フラグのエンコードは `0xD0` と同じ
+  0xD3 -> 'ｒ', // ループ
+  0xD4 -> 'ｌ', // ウィンドウの表示行数を指定したウィンドウクリア(改ページ)
+  0xD5 -> 'ｅ', // SE/BGM再生
+  0xD6 -> 'ｐ', // 立ち絵の表示/消去。2バイト目がスプライトID, 3バイト目が立ち絵ID (0x00の場合は消去), 4バイト目がx座標、5バイト目がy座標 (0x7028が中央)
+  0xD7 -> 'ｂ', // イベント背景の表示
+  0xD8 -> '＿', // 施設メニューの表示？
+  0xD9 -> '＿',
+  0xDA -> 'ｍ', // 所持金の増加？
+  0xDB -> '＿',
+  0xDC -> '＿',
+  0xDD -> 'ｊ', // アイテム所持チェック。アイテムを所持していない場合はジャンプし、所持している場合は継続
+  0xDE -> 'ｏ', // 敵立ち絵の表示。2バイト目が00の場合通常敵、01の場合ボス。4バイト目が悪魔ID
+  0xDF -> 'ｗ', // ウェイト
+  0xE0 -> '＿',
+  0xE1 -> 'ｉ', // アイテムIDを0x50 (プレースホルダの0xF3?) に読み込み
+  0xE2 -> '＿',
+  0xE3 -> '＿',
+  0xE4 -> '＿', // 立ち絵に影響するなにか
+  0xE5 -> '＿',
+  0xE6 -> '＿',
+  0xE7 -> '＿',
+  0xE8 -> '＿',
+  0xE9 -> '＿', // 会話可能状態による分岐。2byte目がチェック対象の仲間ID、3byte目が会話不能時にジャンプするアドレス
+  0xEA -> '＿',
+  0xEB -> '＿',
+  0xEC -> '⓪',  // プレースホルダ (行動中/行動選択中のメンバー/悪魔の名前)
+  0xED -> '①',  // プレースホルダ (交渉中の敵の名前やヒロインの名前、種族名)
+  0xEE -> '②',  // プレースホルダ (ロウヒーローの名前)
+  0xEF -> '③',  // プレースホルダ (カオスヒーローの名前)
+  0xF0 -> '④',  // プレースホルダ (ザ・ヒーローの名前)
+  0xF1 -> '⑤',  // プレースホルダ (パーティで生存している先頭メンバーの名前。人間が複数いる場合、「たち」も付与される)
+  0xF2 -> '⑥',  // プレースホルダ (定形文。 0xF209 でコンピュータ, 0xF21B でアメリカ, 0xF21Cでトウキョウ, 0xF221でカテドラル, 0xF20Bで"・・・", 0xF22Fで"ナカマに くわわった")
+  0xF3 -> '⑦',  // プレースホルダ (アイテム名)
+  0xF4 -> '⑧',  // プレースホルダ (スキル名)
+  0xF5 -> '⑨',  // プレースホルダ (悪魔名)
+  0xF6 -> '⑩',  // プレースホルダ (交渉中のマッカ、マグネタイト、種族)
+  0xF8 -> 'ｙ', // はい/いいえ 2バイト目はローカル会話ID
+  0xF9 -> '⏎',  // キー待ちなし改行
+  0xFA -> '¶',  // ウィンドウクリア(改ページ)
+  0xFB -> 'ｄ', // プレースホルダ (数値)
+  0xFC -> '▼',  // キー待ちあり改行
+  0xFD -> '＿',
+  0xFE -> 'ｓ', // サブルーチンの実行 (0x07 = ウェイト, 0x1C = 光るエフェクト, 0x2C = 名前入力, 0x6c00 = Nのエンディング実行, 0x6c01 = Cのエンディング実行, 0x6c02 = Lのエンディング実行)
+  0xFF -> '；', // 終端
 )
 
 val NORMALIZED_REVERSE_MAPPING = MAPPING.map { case (k, v) => (SmtChar.normalizeChar(v), k) }
@@ -227,7 +274,11 @@ object SmtChar {
 
   def decodeHexString(hex: String): Option[SmtChar] = SmtChar.fromInt(Integer.parseInt(hex, 16))
 
-  def normalizeChar(char: Char): Char = Normalizer.normalize(char.toString, Normalizer.Form.NFKC).toCharArray.head.toUpper
+  def normalizeChar(char: Char): Char =
+    char match {
+      case '⓪' | '①' | '②' | '③' | '④' | '⑤' | '⑥' | '⑦' | '⑧' | '⑨' | '⑩' => char
+      case _ => Normalizer.normalize(char.toString, Normalizer.Form.NFKC).toCharArray.head.toUpper
+    }
 
   def fromChar(char: Char): Option[SmtChar] = NORMALIZED_REVERSE_MAPPING.get(normalizeChar(char)).map(SmtChar(_))
 }
