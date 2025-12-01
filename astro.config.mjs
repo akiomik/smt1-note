@@ -26,7 +26,16 @@ export default defineConfig({
         },
       },
       customCss: ['./src/styles/custom.css'],
+      favicon: '/favicon.ico',
       head: [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: '/favicon.svg',
+          },
+        },
         {
           tag: 'link',
           attrs: {
