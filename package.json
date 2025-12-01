@@ -12,8 +12,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "fix": "xo --fix",
-    "lint": "xo"
+    "fix": "biome check --write .",
+    "lint": "biome check ."
   },
   "dependencies": {
     "@docusaurus/core": "2.4.1",
@@ -29,14 +29,10 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.4.1",
-    "xo": "^0.56.0"
+    "@biomejs/biome": "^1.5.3"
   },
   "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.5%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
