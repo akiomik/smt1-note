@@ -1,0 +1,15 @@
+{
+  "footnoteLabel": "脚注",
+  "page.tableOfContents": "目次",
+  "page.lastUpdated": "最終更新",
+  "page.editLink": "このページを編集",
+  "page.nextLink": "次",
+  "page.prevLink": "前",
+  "search.label": "検索",
+  "skipLink.label": "メインコンテンツへスキップ",
+  "404.text": "ページが見つかりません",
+  "aside.note": "注意",
+  "aside.tip": "ヒント",
+  "aside.caution": "警告",
+  "aside.danger": "危険"
+}

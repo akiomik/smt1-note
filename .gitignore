@@ -121,8 +121,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Docusaurus files
-.docusaurus/
+# Astro files
+.astro/
 
 # other files
 .DS_Store

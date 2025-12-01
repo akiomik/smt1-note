@@ -6,7 +6,7 @@
 
 ## ドキュメントの生成
 
-[Docusaurus 2](https://docusaurus.io/) を使って生成している。
+[Starlight](https://starlight.astro.build/) を使って生成している。
 
 ```bash
 npm install # インストール
