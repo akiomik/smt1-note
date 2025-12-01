@@ -123,3 +123,6 @@ dist
 
 # Docusaurus files
 .docusaurus/
+
+# other files
+.DS_Store
