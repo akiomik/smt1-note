@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
 import styles from './styles.module.css';
 
 const FeatureList = [
@@ -54,7 +53,7 @@ export default function HomepageFeatures() {
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
+          {FeatureList.map((props, _idx) => (
             <Feature key={props.title} {...props} />
           ))}
         </div>

@@ -1,4 +1,29 @@
 {
+  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.mjs",
+      "**/*.json",
+      "**/*.css",
+      "!!**/node_modules",
+      "!!**/dist",
+      "!!**/.astro",
+      "!!**/build",
+      "!!**/.vercel",
+      "!!**/public",
+      "!!**/static"
+    ]
+  },
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
@@ -6,7 +31,16 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 80,
-    "lineEnding": "lf"
+    "lineEnding": "lf",
+    "includes": [
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.mjs",
+      "**/*.json",
+      "**/*.css"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -17,6 +51,12 @@
       },
       "correctness": {
         "noUnusedVariables": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn"
       }
     }
   },
@@ -24,18 +64,31 @@
     "formatter": {
       "quoteStyle": "single",
       "trailingCommas": "es5",
-      "semicolons": "always"
+      "semicolons": "always",
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "quoteProperties": "asNeeded",
+      "attributePosition": "auto"
+    },
+    "globals": ["astro/client"]
+  },
+  "json": {
+    "formatter": {
+      "enabled": true
     }
   },
-  "files": {
-    "ignore": [
-      "babel.config.js",
-      "docusaurus.config.js",
-      "eslint.config.js",
-      "sidebars.js",
-      "build/**",
-      ".docusaurus/**",
-      "node_modules/**"
-    ]
-  }
+  "css": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/package-lock.json", "**/yarn.lock", "**/pnpm-lock.yaml"],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ]
 }

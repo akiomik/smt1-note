@@ -65,9 +65,7 @@ export default defineConfig({
         },
         {
           label: 'スキル',
-          items: [
-            { label: '概要', slug: 'skill' },
-          ],
+          items: [{ label: '概要', slug: 'skill' }],
         },
         {
           label: '悪魔',
