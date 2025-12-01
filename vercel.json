@@ -7,13 +7,13 @@
       "permanent": true
     },
     {
-      "source": "/docs/enum-and-flags/:path*", 
+      "source": "/docs/enum-and-flags/:path*",
       "destination": "/system/enum-and-flags/:path*",
       "permanent": true
     },
     {
       "source": "/docs/event/:path*",
-      "destination": "/system/event/:path*", 
+      "destination": "/system/event/:path*",
       "permanent": true
     },
     {
