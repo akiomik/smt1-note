@@ -12,8 +12,8 @@
     "lint": "biome check ."
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.37.6",
-    "astro": "^5.18.1",
+    "@astrojs/starlight": "^0.38.3",
+    "astro": "^6.1.8",
     "rehype-katex": "^7.0.1",
     "rehype-slug": "^6.0.0",
     "remark-custom-heading-id": "^2.0.0",
