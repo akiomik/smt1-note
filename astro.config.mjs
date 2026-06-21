@@ -1,5 +1,6 @@
 import starlight from '@astrojs/starlight';
 // @ts-check
+import { unified } from '@astrojs/markdown-remark';
 import { defineConfig } from 'astro/config';
 import rehypeKatex from 'rehype-katex';
 import remarkCustomHeadingId from 'remark-custom-heading-id';
@@ -10,8 +11,10 @@ export default defineConfig({
   site: 'https://smt1-note.vercel.app',
   trailingSlash: 'never',
   markdown: {
-    remarkPlugins: [remarkCustomHeadingId, remarkMath],
-    rehypePlugins: [[rehypeKatex, { output: 'html' }]],
+    processor: unified({
+      remarkPlugins: [remarkCustomHeadingId, remarkMath],
+      rehypePlugins: [[rehypeKatex, { output: 'html' }]],
+    }),
   },
   integrations: [
     starlight({
@@ -61,7 +64,7 @@ export default defineConfig({
         {
           label: 'ゲームシステム',
           collapsed: false,
-          autogenerate: { directory: 'system' },
+          items: [{ autogenerate: { directory: 'system' } }],
         },
         {
           label: 'スキル',
