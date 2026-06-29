@@ -12,7 +12,7 @@
     "lint": "biome check ."
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.2.0",
+    "@astrojs/markdown-satteri": "^0.3.2",
     "@astrojs/starlight": "^0.40.0",
     "astro": "^6.4.8",
     "rehype-katex": "^7.0.1",
